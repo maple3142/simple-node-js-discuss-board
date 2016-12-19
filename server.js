@@ -1,13 +1,13 @@
 module.exports=function(){
-	var stime=new Date().getTime();
 	var express = require('express');
 	var app = express();
 	var bodyParser = require('body-parser');
 	var session = require('express-session');
 	var low=require('lowdb');
 	var e=require('./encrypt');
-	
 	var db=low('./db/user.json');
+
+	app.set('view engine', 'ejs');
 	app.use(bodyParser.json());
 	app.use(session({
 		secret: rstring(128),
@@ -21,11 +21,11 @@ module.exports=function(){
 	})); 
 	app.use('/html',express.static('./html'));
 	app.get('/',function(req,res){
-		res.send((new Date().getTime()-stime).toString());
+		res.render('./board',{user:'unknown'});
 	});
-	app.get('/profile',function(req,res){
+	app.get('/goboard',function(req,res){
 		if(req.session.identity){
-			res.send('Welecome '+e.decrypt(req.session.identity)+'!');
+			res.render('./board',{user:req.body.ac});
 		}
 		else
 			res.redirect('../');
@@ -33,7 +33,7 @@ module.exports=function(){
 	app.post('/login',function(req,res){
 		if(e.decrypt(db.get(req.body.ac).value())==req.body.pw){
 			req.session.identity=req.body.ac;
-			res.redirect('./profile');
+			res.redirect('./goboard');
 		}
 		else
 			res.send('login failed');
