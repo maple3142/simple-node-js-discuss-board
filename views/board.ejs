@@ -1,0 +1,14 @@
+<ul>
+    <% for(var i=0;i<msg.length;i++){ %>
+        <li><%= msg[i] %></li>
+    <% } %>
+</ul>
+<form onsubmit="return check();" action="./addmsg" method="post">
+    <input type="text" id="msg" name="msg">
+    <input type="submit" name="send" value="Send">
+</form>
+<script>
+function check(){
+    return document.querySelector('#msg').value.length>0;
+}
+</script>
