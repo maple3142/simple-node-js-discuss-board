@@ -1,0 +1,25 @@
+<form onsubmit="return check();" method="post" action="../register">
+	<label for="ac">Account:</label>
+	<input type="text" name="ac" id="ac" required>
+	<br>
+	<label for="pw">Password:</label>
+	<input type="password" name="pw" id="pw" required>
+	<br>
+	<label for="pw2">Password Again:</label>
+	<input type="password" name="pw2" id="pw2" required>
+	<br>
+	<input type="submit" name="send" value="send" id="submit">
+</form>
+<script>
+function check(){
+	if(document.querySelector('#pw').value!=document.querySelector('#pw2').value){
+		alert('password not same');
+		return false;
+	}
+	if(document.querySelector('#pw').value.length<6 || document.querySelector('#pw2').value.length<6){
+		alert('password length too short(at least 6)');
+		return false;
+	}
+	return true;
+}
+</script>
