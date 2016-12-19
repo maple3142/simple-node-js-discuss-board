@@ -24,7 +24,7 @@ module.exports=function(){
 		res.send((new Date().getTime()-stime).toString());
 	});
 	app.get('/profile',function(req,res){
-		if(req.session.logined){
+		if(req.session.identity){
 			res.send('Welecome '+e.decrypt(req.session.identity)+'!');
 		}
 		else
@@ -32,7 +32,7 @@ module.exports=function(){
 	});
 	app.post('/login',function(req,res){
 		if(e.decrypt(db.get(req.body.ac).value())==req.body.pw){
-			req.session=true;
+			req.session.identity=req.body.ac;
 			res.redirect('./profile');
 		}
 		else
