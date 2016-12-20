@@ -1,6 +1,6 @@
 <ul>
     <% for(var i=0;i<msg.length;i++){ %>
-        <li><%= msg[i] %></li>
+        <li><%= msg[i].text %> <a href="./delete?id=<%= msg[i].id %>">delete</a></li>
     <% } %>
 </ul>
 <form onsubmit="return check();" action="./addmsg" method="post">
