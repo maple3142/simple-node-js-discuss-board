@@ -11,25 +11,45 @@ module.exports=function(){
 	app.set('view engine', 'ejs');
 	app.use(bodyParser.urlencoded({ extended: true }))
 	app.use(bodyParser.json());
-	app.get('/',function(req,res){
-		res.render('./board',{msg: db.get('msg').value()});
+	app.use(session({
+		name: 'tmp',
+		secret: 'EE5SwYstbe0ZIv5Zw5kZT6QWsPMEnQ3w0cT7nJK0wCsBriArb06YyTqqnlGu7h27tKN7VjiWiESa6ksLATsdeWUj7xMAzqDmlA7sU4e8tVOO41pgCaPYckJrKT8i5DL4',
+		cookie: { maxAge: 60 * 1000 },
+		resave: true,
+		saveUninitialized: true
+	}));
+
+	app.get('/',(req,res)=>{
+		res.render('./board',{msg: db.get('msg').value(),admin :req.session.admin});
 	});
-	app.post('/addmsg',function(req,res){
+	app.post('/addmsg',(req,res)=>{
 		db.get('msg').push({text: req.body.msg, id: Date.now()}).value();
 		res.redirect('../');
 	});
-	app.get('/delete',function(req,res){
-		console.log(req.query.id);
-		console.log(db.get('msg').find({id: req.query.id}));
-		db.get('msg').filter({id: req.query.id}).remove().value();
+	app.get('/delete',(req,res)=>{
+		var msgs=db.get('msg').value();
+		for(i in msgs){
+			if(msgs[i].id==req.query.id){
+					db.get('msg').remove(msgs[i]).value();
+					break;
+			}
+		}
+		res.redirect('../');
+		
+	});
+	app.post('/login',(req,res)=>{
+		if(req.body.pw=='Kirby123'){
+			req.session.admin=true;
+		}
 		res.redirect('../');
 	});
+	app.get('/logout',(req,res)=>{
+		req.session.admin=false;
+		res.redirect('../');
+	});
+
 	//listen
 	app.listen(80,function(){
 	  console.log('server started');
 	});
-
-	var alert=function(s){
-		res.send('<script>alert("'+s+'");</script>');
-	}
 }

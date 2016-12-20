@@ -1,12 +1,20 @@
 <ul>
     <% for(var i=0;i<msg.length;i++){ %>
-        <li><%= msg[i].text %> <a href="./delete?id=<%= msg[i].id %>">delete</a></li>
+        <li><%= msg[i].text %> <% if(admin){ %><a href="./delete?id=<%= msg[i].id %>">delete</a><% } %> </li>
     <% } %>
 </ul>
 <form onsubmit="return check();" action="./addmsg" method="post">
     <input type="text" id="msg" name="msg">
     <input type="submit" name="send" value="Send">
 </form>
+<% if(!admin){%>
+    <form action="./login" method="post">
+        <input type="password" name="pw">
+        <input type="submit" name="send" value="Login">
+    </form>
+<% }else{ %>
+    <a href="./logout">Logout</a>
+<% } %>
 <script>
 function check(){
     return document.querySelector('#msg').value.length>0;
