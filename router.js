@@ -38,7 +38,7 @@ module.exports=function(){
 		
 	});
 	app.post('/login',(req,res)=>{
-		if(req.body.pw=='Kirby123'){
+		if(req.body.pw==db.get('admin').value()){
 			req.session.admin=true;
 		}
 		res.redirect('../');
